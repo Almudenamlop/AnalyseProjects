@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Db</title>
+		<link href="boostrap.css" rel="stylesheet" type="text/css"/>
+		<style type="text/css" rel="stylelsheet">
+			{% include 'bootstrap/css/bootstrap.css' %}
+		</style>
+	</head>
+
+
+
+	<body>
+
+	<nav class="navbar navbar-inverse navbar-fixed-top" role=navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        			<span class="sr-only">Toggle navigation</span>
+        			<span class="icon-bar"></span>
+        			<span class="icon-bar"></span>
+        			<span class="icon-bar"></span>
+      				</button>
+      				<a class="navbar-brand" href="#">PFC</a>
+			</div>
+			 <!-- Collect the nav links, forms, and other content for toggling -->
+    			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      				<ul class="nav navbar-nav">
+       					<li class="active"><a href="http://localhost:1234/">Inicio</a></li>
+        				<li><a href="http://localhost:1234/people/">Gente</a></li>
+        				<li class="dropdown">
+         				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+          				<ul class="dropdown-menu">
+            				<li><a href="#">Action</a></li>
+            				<li><a href="#">Another action</a></li>
+            				<li><a href="#">Something else here</a></li>
+				        <li class="divider"></li>
+			            	<li><a href="#">Separated link</a></li>
+            				<li class="divider"></li>
+            				<li><a href="#">One more separated link</a></li>
+          				</ul>
+        			</li>
+      				</ul>
+    
+    			</div><!-- /.navbar-collapse -->
+		</div><!--container-fluid-->
+
+	</nav><!--navbar-->
+
+	<div class="bs-docs-section">
+		<h1 class="page-header">{{nombre}}</h1>
+	</div><!--/bs-docs-section-->
+
+	
+
+
+<div class="container">
+    <h1>Click the filter icon <small>(<i class="glyphicon glyphicon-filter"></i>)</small></h1>
+    	<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">Developers</h3>
+				<div class="pull-right">
+				<span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body">
+					<i class="glyphicon glyphicon-filter"></i>
+				</span>
+				</div>
+			</div>
+			<div class="panel-body">
+				<input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter Developers" />
+			</div>
+			<table class="table table-hover" id="dev-table">
+			{{info|safe}}
+			</table>
+		</div>
+	</div>
+	</div>
+</div>
+
+	<div id="copyright">
+		<p> Copyright (c) PFC Almudena Mateos Lopez 2014. All rights reserved</p>
+	</div>
+
+</body>
+</html>
