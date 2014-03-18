@@ -66,7 +66,6 @@ def principal(request):
 
 
 
-
 def people(request):
 
 	if(request.method == "GET"):
@@ -109,4 +108,45 @@ def person(request,nombre, ident):
 		return render_to_response('person.html',
 						{'info':info,'nombre':nombre},
 						context_instance=RequestContext(request))
+
+
+def stats(request):
+
+	if(request.method == "GET"):
+		tabla = ""
+		estadistica =""
+		top_iden = "No hay commits"
+		top_commits = 0
+
+		total_commits = consultas("SELECT COUNT(*) FROM scmlog")[0][0]
+		data = consultas("SELECT author_id, COUNT(*) FROM scmlog group by author_id")
+		dif = consultas("SELECT COUNT(*) FROM scmlog WHERE author_id=committer_id")[0][0]
+
+		tabla += '<thead><tr><th>Author name</th><th>Commits</th></tr></thead><tbody>'
+		for registro in data:
+			nombre = consultas("SELECT name FROM people WHERE id="+str(registro[0]))
+			for x in nombre:
+				name = x[0]
+			tabla += '<tr><td>'+name+'</td><td>'+str(registro[1])+'</td></tr>'
+			if(registro[1]>top_commits):
+				top_commits = registro[1]
+				top_iden = name
+		
+		cuenta = round((top_commits/float(total_commits))*100,2)
+		authors = round((dif/float(total_commits))*100,2)
+
+		estadistica += '<tbody>'
+		estadistica += '<tr><td>Top Commiter</td><td>'+top_iden+"  ("+str(top_commits)+')</td></tr>'
+		estadistica += '<tr><td>Porcentaje commits en el proyecto</td><td>'+str(cuenta)+'%</td></tr>'
+		estadistica += '<tr><td>% Commiters que sean autores</td><td>'+str(authors)+'</td></tr>'
+		tabla = tabla.decode('ascii','ignore')
+
+		
+		
+		return render_to_response('stats.html',
+						{'info':tabla,'stats':estadistica},
+						context_instance=RequestContext(request))
+
+
+
 
