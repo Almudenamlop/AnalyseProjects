@@ -3,12 +3,19 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.template.loader import get_template
 from django.template import Context
 from django.template import RequestContext
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
+from django.template.loader import render_to_string
 from django.shortcuts import render
 from django import forms
+from datetime import datetime
+from django.template import Template, Context
 
 import models
 import MySQLdb
+import json
+import django.utils.simplejson as json
+
 
 
 
@@ -149,4 +156,63 @@ def stats(request):
 
 
 
+def graphs(request):
 
+	lista = []
+	data = consultas("SELECT date FROM scmlog")
+
+	for registro in data:
+			date = registro[0]
+			x = date.strftime('%Y/%m/%d')
+			lista.append(x)
+	lista.sort()
+	
+	meses = graphmonth(lista)
+	anios = graphyears(lista)
+	
+	return render_to_response('/home/almudena/pfc/proyecto/proyecto/templates/graphs.html',meses)
+
+
+
+def graphmonth(lista):
+
+	datos = {'dates':[],'values':[]}	
+
+	dia_aux= lista[0][0:7]
+	datos['dates'].append(dia_aux)
+	n = 0
+	numcommits = 0
+	for fecha in lista:
+		fecha = fecha[0:7]
+		if (fecha != dia_aux):
+			datos['values'].append(numcommits)
+			numcommits = 0
+			datos['dates'].append(fecha)
+			dia_aux = fecha
+			
+		numcommits +=1
+	
+	return datos
+
+def graphyears(lista):
+
+	datos = {'dates':[],'values':[]}	
+
+	dia_aux= lista[0][0:4]
+	datos['dates'].append(dia_aux)
+	n = 0
+	numcommits = 0
+	for fecha in lista:
+		fecha = fecha[0:4]
+		if (fecha != dia_aux):
+			datos['values'].append(numcommits)
+			numcommits = 0
+			datos['dates'].append(fecha)
+			dia_aux = fecha
+			
+		numcommits +=1
+	
+	return datos
+
+
+	
